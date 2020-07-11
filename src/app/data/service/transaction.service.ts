@@ -4,6 +4,8 @@ import { CoinBase } from '../constants/CommonConstant';
 import { TransactionInput } from '../schema/transaction-input.model';
 import { Transaction } from '../schema/transaction.model';
 import { BlockchainService } from './blockchain.service';
+import { IndexeddbService } from './indexeddb.service';
+import { Table } from '../enum/database.info';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,8 @@ export class TransactionService {
   private static sequence = 0;
 
   constructor(
-    private readonly blockChainSer: BlockchainService
+    private readonly blockChainSer: BlockchainService,
+    private dbSer: IndexeddbService
   ) { }
 
   /**
@@ -40,5 +43,9 @@ export class TransactionService {
     console.log(transaction.transactionId);
     console.log('createTransaction: END');
     return transaction;
+  }
+
+  public async saveLocal(transaction: Transaction) {
+    this.dbSer.insert(Table.TRANSACTION, transaction);
   }
 }

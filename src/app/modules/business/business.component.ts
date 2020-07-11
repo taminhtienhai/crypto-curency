@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { ConnectionService } from '../../core/p2p/connection.service';
 import { FirebaseService } from '../../data/service/firebase.service';
 import { IndexeddbService } from '../../data/service/indexeddb.service';
@@ -50,6 +49,7 @@ export class BusinessComponent implements OnInit {
   async initGenesisBlock(): Promise<void> {
     const { success, error, data: blockchain } = await this.dbSer.fetchAll(Table.BLOCK);
     if (!success) { this.notifier.notify(NotifierType.ERROR, error); }
+    // console.log(blockchain.length === 0);
     if (blockchain.length === 0) {
       const block = await this.blockSer.generateGenesis();
       if (!block) { console.log('No wallet found. Stop generation'); }

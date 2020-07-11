@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { SessionAtribute } from '@shared/enum/SharedEnum';
 import { FirebaseService } from '../../data/service/firebase.service';
-import { Table, AccountDoc, Operator } from '../../data/enum/database.info';
-import { QueryBuiler } from '../../data/utils/query.util';
-import { Account } from '../../data/schema/account.model';
-import { CommonResult } from '../../data/type/general.type';
-import { IndexeddbService } from '../../data/service/indexeddb.service';
-import { SessionUtils } from '../../shared/utils/session.util';
+import { Table, AccountDoc, Operator } from '@data/enum/database.info';
+import { QueryBuiler } from '@data/utils/query.util';
+import { Account } from '@data/schema/account.model';
+import { CommonResult } from '@data/type/general.type';
+import { IndexeddbService } from '@data/service/indexeddb.service';
+import { SessionUtils } from '@shared/utils/session.util';
 import { NotifierService } from 'angular-notifier';
-import { NotifierType } from '../../shared/enum/SharedEnum';
+import { NotifierType } from '@shared/enum/SharedEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class WalletService {
    * @returns Promise<string>: WalletName
    */
   public async getLocalWallet(): Promise<string> {
-    const user = JSON.parse(sessionStorage.getItem(SessionAtribute.USER)) ?? null;
+    const user = SessionUtils.getUser();
     if (!user) { return null; }
     const queryResult = await this.fireSer.readItem(Table.ACCOUNT, user.username);
     if (!queryResult.success) { return null; }

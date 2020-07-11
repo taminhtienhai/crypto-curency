@@ -52,7 +52,7 @@ export class Transaction {
     try {
       // No input found
       if (this.transactionInputs.length === 0) { throw new Error(errorMessage.EMPTY_VALUE); }
-      // if (this.verifyTotalAmount() < 0) { throw new Error(errorMessage.NOT_ENOUGH_COIN); }
+      if (this.verifyTotalAmount() < 0) { throw new Error(errorMessage.NOT_ENOUGH_COIN); }
       for (const input of this.transactionInputs) {
         const verifySig = await input.verifySignarute();
         // Invalid signature
@@ -73,10 +73,12 @@ export class Transaction {
       const { preOutput: { amount } } = input;
       totalInput += amount;
     }
+    console.log(this.transactionInputs);
     for (const output of this.transactionOutputs) {
       const { amount } = output;
       totalOutput += amount;
     }
+    console.log(this.transactionOutputs);
     const leftover = totalInput - totalOutput;
     console.log(leftover);
     return leftover;
@@ -95,7 +97,9 @@ export class Transaction {
           await output.calculateHash();
           myOutput.push(output);
         }
+        if (info.sender === 'coinbase') { continue; }
         const returnOutput: TransactionOutput = this.returnOutput(info);
+        await returnOutput.calculateHash();
         if (returnOutput) { myOutput.push(returnOutput); }
       }
       this.transactionOutputs = myOutput;

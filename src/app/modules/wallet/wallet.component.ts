@@ -8,16 +8,15 @@ import { IndexeddbService } from '@data/service/indexeddb.service';
 import { CryptoUtils } from '@data/utils/crypto.util';
 import { StringUtils } from '@data/utils/string.util';
 import { Message } from '@shared/messages/CommonMessage';
-import { KeyPair } from 'eccrypto-js';
-import { NGXLogger } from 'ngx-logger';
-import { WalletService } from '../../core/service/wallet.service';
-import { SessionAtribute } from '@shared/enum/SharedEnum';
-import { FirebaseService } from '../../data/service/firebase.service';
+import { SessionUtils } from '@shared/utils/session.util';
 import { NotifierService } from 'angular-notifier';
-import { NotifierType } from '../../shared/enum/SharedEnum';
-import { errorMessage } from '../../shared/error/ErrorMessage';
-import { QueryBuiler } from '../../data/utils/query.util';
-import { AccountDoc, Operator } from '../../data/enum/database.info';
+import { KeyPair } from 'eccrypto-js';
+import { WalletService } from '@core/service/wallet.service';
+import { AccountDoc, Operator } from '@data/enum/database.info';
+import { FirebaseService } from '@data/service/firebase.service';
+import { QueryBuiler } from '@data/utils/query.util';
+import { NotifierType } from '@shared/enum/SharedEnum';
+import { errorMessage } from '@shared/error/ErrorMessage';
 
 @Component({
   selector: 'app-wallet',
@@ -31,7 +30,6 @@ export class WalletComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private logger: NGXLogger,
     private dbSer: IndexeddbService,
     private router: Router,
     private dialogSer: DialogService,
@@ -41,21 +39,21 @@ export class WalletComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.logger.info('ngOnInit WalletComponent: START');
+    console.log('ngOnInit WalletComponent: START');
     // Init Form
     this.formGroup = this.fb.group({
       publicKey: [''],
       privateKey: [''],
       walletName: ['', Validators.pattern('[a-zA-Z ]+')]
     });
-    this.logger.info('ngOnInit WalletComponent: END');
+    console.log('ngOnInit WalletComponent: END');
   }
 
   /**
    * Change other KeyPair
    */
   public async refreshKeyPair(): Promise<void> {
-    this.logger.info('refreshKeyPair: START');
+    console.log('refreshKeyPair: START');
     let run = true;
     let keyPair: KeyPair = null;
     let count = 0;
@@ -72,16 +70,16 @@ export class WalletComponent implements OnInit {
         privateKey: StringUtils.castBufferToString(keyPair.privateKey)
       });
     } catch (err) {
-      this.logger.error(err);
+      console.error(err);
     }
-    this.logger.info('refreshKeyPair: END');
+    console.log('refreshKeyPair: END');
   }
 
   /**
    * Emit when submit WalletForm.
    */
   public async saveWallet(): Promise<void> {
-    this.logger.info('saveWallet: START');
+    console.log('saveWallet: START');
     // * This return `string` not `boolean`
     const isConfirm = await this.dialogSer.openConfirmDialog(Message.CONFIRM);
     if (isConfirm === 'false') { return; }
@@ -89,7 +87,7 @@ export class WalletComponent implements OnInit {
     if (!this.formGroup.valid) { return; }
     try {
       const walletInfo = this.formGroup.value;
-      const user = JSON.parse(sessionStorage.getItem(SessionAtribute.USER)) ?? null;
+      const user = SessionUtils.getUser();
       if (!user) { throw new Error(errorMessage.NOT_AUTH); }
 
       const { success, error, data: [account] } = await this.fireSer.readItem(Table.ACCOUNT, [
@@ -106,10 +104,10 @@ export class WalletComponent implements OnInit {
 
       this.router.navigate(['/business']);
     } catch (err) {
-      this.logger.error(err); // ! Maybe API error or formGroup error
+      console.error(err); // ! Maybe API error or formGroup error
       this.notifier.notify(NotifierType.ERROR, err);
     }
-    this.logger.info('saveWallet: END');
+    console.log('saveWallet: END');
   }
 
 }

@@ -20,7 +20,7 @@ export class PeerConnection {
 
   get Id(): string { return this.id; }
   get Date(): number { return this.date; }
-  get Connection(): any { return this.connection; }
+  get Connection(): DataConnection { return this.connection; }
 
   listenData(input: any) {
     console.log('listenData: START');

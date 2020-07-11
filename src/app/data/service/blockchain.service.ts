@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
-import { NGXLogger } from 'ngx-logger';
 import { NotifierType } from '../../shared/enum/SharedEnum';
 import { errorMessage } from '../../shared/error/ErrorMessage';
 import { Table, WalletDoc } from '../enum/database.info';
@@ -27,8 +26,7 @@ export class BlockchainService {
 
   constructor(
     private dbSer: IndexeddbService,
-    private notifier: NotifierService,
-    private logger: NGXLogger
+    private notifier: NotifierService
   ) { }
 
   /**
@@ -68,7 +66,7 @@ export class BlockchainService {
       // Asign return output values.
       tranOutputs = await this.calculateOutput();
     } catch (err) {
-      this.logger.error(err);
+      console.error(err);
       tranOutputs = [];
     } finally {
       this.UTXOs = tranOutputs;
@@ -122,7 +120,7 @@ export class BlockchainService {
       signedInput = new TransactionInput(output);
       signedInput.signature = StringUtils.castBufferToString(signature);
     } catch (err) {
-      this.logger.error(err);
+      console.error(err);
       return null;
     }
     return signedInput;

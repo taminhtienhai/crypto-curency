@@ -19,13 +19,14 @@ export class ConnectionService {
   public peer: Peer;
   public lastPeerId: string;
   public peerConnection: PeerConnection[] = [];
+  public dataConnectionArray: DataConnection[] = [];
 
   private MAX_CONNECTION = 5;
 
   constructor(
     private readonly notifier: NotifierService,
     private readonly fireSer: FirebaseService
-  ) {}
+  ) { }
 
   public newPeer(peerId: string): Peer {
     return new Peer(peerId, {
@@ -33,18 +34,21 @@ export class ConnectionService {
       host: 'my-peer-server-0009.herokuapp.com',
       secure: true,
       port: 443,
-      config: {iceServers: [
-        {urls: ['turn:173.194.72.127:19305?transport=udp',
-           'turn:[2404:6800:4008:C01::7F]:19305?transport=udp',
-           'turn:173.194.72.127:443?transport=tcp',
-           'turn:[2404:6800:4008:C01::7F]:443?transport=tcp'
-           ],
-         username: 'CKjCuLwFEgahxNRjuTAYzc/s6OMT',
-         credential: 'u1SQDR/SQsPQIxXNWQT7czc/G4c='
-        },
-        {urls: ['stun:stun.l.google.com:19302']}
-        ]}
-      });
+      config: {
+        iceServers: [
+          {
+            urls: ['turn:173.194.72.127:19305?transport=udp',
+              'turn:[2404:6800:4008:C01::7F]:19305?transport=udp',
+              'turn:173.194.72.127:443?transport=tcp',
+              'turn:[2404:6800:4008:C01::7F]:443?transport=tcp'
+            ],
+            username: 'CKjCuLwFEgahxNRjuTAYzc/s6OMT',
+            credential: 'u1SQDR/SQsPQIxXNWQT7czc/G4c='
+          },
+          { urls: ['stun:stun.l.google.com:19302'] }
+        ]
+      }
+    });
   }
 
   public async startConnection(): Promise<Peer> {
@@ -89,16 +93,18 @@ export class ConnectionService {
     });
     // When a peer connect to you
     this.peer.on('connection', (connection: DataConnection) => {
-      const newConnection = new PeerConnection(connection);
-      this.peerConnection.push(newConnection);
-      connection.on('open', () => {
-        console.log('New peer discovery');
-        console.log(connection.peer);
-        connection.send(`Peer ${this.peer.id} say hello`);
-      });
+      this.manageOtherConnection(connection);
+    });
+  }
+
+  public manageOtherConnection(connection: DataConnection): DataConnection {
+    connection.on('open', () => {
+      console.log('New peer discovery');
+      console.log(connection.peer);
+      connection.send(`Peer ${this.peer.id} say hello`);
       // Receive data from peer
       connection.on('data', (data) => {
-        newConnection.listenData(data);
+        console.log(data);
         // Todo: Mode blockchain update
         // Todo: Mode transactions update
       });
@@ -113,7 +119,10 @@ export class ConnectionService {
         this.notifier.notify(NotifierType.ERROR, error);
         this.removePeerDisconnected(connection);
       });
+      const newConnection = new PeerConnection(connection);
+      this.peerConnection.push(newConnection);
     });
+    return connection;
   }
 
   /**
@@ -131,10 +140,15 @@ export class ConnectionService {
     if (!this.peer) {
       await this.startConnection();
     }
-    for (const conn of this.peerConnection) {
-      const connection = conn.Connection as DataConnection;
-      connection.send(data);
+    for (const conn of this.dataConnectionArray) {
+      console.log(`Peer to broadcast is ${conn.peer}`);
+      conn.on('open', () => { conn.send(data); });
     }
+  }
+
+  public connectTo(peerId: string): DataConnection {
+    const dataConnection: DataConnection = this.peer.connect(peerId);
+    return this.manageOtherConnection(dataConnection);
   }
 
   /**
@@ -145,14 +159,21 @@ export class ConnectionService {
     let count = 1;
     // Fetch all online peer
     let accounts: Account[] = await this.findOnlinePeer();
+    const user = SessionUtils.getUser();
     // If no one online, return error
     if (accounts.length === 0) { throw new Error(errorMessage.NO_ONE_AVAILABLE); }
-    while (count <= this.MAX_CONNECTION && accounts.length > 0) {
+    console.log(accounts);
+    while (count <= this.MAX_CONNECTION || accounts.length > 0) {
       // Connect random peer
       const random: number = Math.floor(Math.random() * accounts.length);
+      console.log(random);
+      if (accounts.length === 0) { break; }
       const { peerId, id } = accounts[random] as Account;
-      if (!peerId) { continue; }
-      this.peer.connect(peerId);
+      if (!peerId || peerId === user.peerId) {
+        accounts = accounts.filter(it => it.id !== id);
+        continue;
+      }
+      this.dataConnectionArray.push(this.connectTo(peerId));
       accounts = accounts.filter(it => it.id !== id);
       count++;
     }

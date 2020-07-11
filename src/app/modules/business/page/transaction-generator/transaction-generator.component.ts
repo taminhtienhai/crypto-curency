@@ -7,11 +7,10 @@ import { TransactionService } from '@data/service/transaction.service';
 import { SendInfo } from '@data/type/general.type';
 import { NotifierType } from '@shared/enum/SharedEnum';
 import { NotifierService } from 'angular-notifier';
-import { NGXLogger } from 'ngx-logger';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { ConnectionService } from '../../../../core/p2p/connection.service';
-import { CommonResult } from '../../../../data/type/general.type';
+import { ConnectionService } from '@core/p2p/connection.service';
+import { SessionUtils } from '../../../../shared/utils/session.util';
 
 @Component({
   selector: 'app-transaction-generator',
@@ -31,13 +30,11 @@ export class TransactionGeneratorComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private logger: NGXLogger,
     private dbSer: IndexeddbService,
     private notifier: NotifierService,
     private tranSer: TransactionService,
     private connSer: ConnectionService
   ) {
-    logger.info('Load Transaction Generator');
   }
 
   ngOnInit(): void {
@@ -45,12 +42,13 @@ export class TransactionGeneratorComponent implements OnInit {
     this.formGroup = this.fb.group({
       sender: ['', Validators.required],
       recipient: ['', Validators.required],
-      amount: ['', Validators.required],
+      amount: [0, Validators.required],
       currency: [''],
       description: ['']
     });
     this.dbSer.fetchAll(Table.WALLET).then(result => {
-      this.wallets = result.data;
+      const user = SessionUtils.getUser();
+      this.wallets = result.data.filter(it => it.referenceUser === user.id);
       console.log(this.wallets);
       this.walletOptions = this.formGroup.get('sender').valueChanges.pipe(
         startWith(''),
@@ -74,7 +72,7 @@ export class TransactionGeneratorComponent implements OnInit {
   }
 
   public async sendCoin(): Promise<void> {
-    this.logger.info('onSubmit: START');
+    console.log('onSubmit: START');
     let foundWallet = false;
     try {
       const { sender, recipient, amount, description } = this.formGroup.value;
@@ -91,31 +89,31 @@ export class TransactionGeneratorComponent implements OnInit {
       if (this.sendInfo.length === 0) {
         this.sendInfo.push({ sender: sender.publicKey ?? sender, targets: [{ recipient, amount, description }] });
       }
-      this.logger.debug(this.sendInfo);
+      console.log(this.sendInfo);
     } catch (error) {
-      this.logger.error(error);
+      console.error(error);
       this.notifier.notify(NotifierType.ERROR, error);
     } finally {
       this.transactionArray.push(this.formGroup.value);
     }
-    this.logger.info('onSubmit: END');
+    console.log('onSubmit: END');
   }
 
   /**
    * Set SendInfo and Transaction[] to [].
    */
   public async clearData() {
-    this.logger.info('clearData: START');
+    console.log('clearData: START');
     this.transactionArray = [];
     this.sendInfo = [];
-    this.logger.info('clearData: END');
+    console.log('clearData: END');
   }
 
   /**
    * Broadcast a new Transaction to connecting Peer.
    */
   public async sendTransaction(): Promise<void> {
-    this.logger.info('sendTransaction: START');
+    console.log('sendTransaction: START');
     this.sendMode = 0;
     try {
       const transaction = await this.tranSer.createTransaction(this.sendInfo);
@@ -126,9 +124,12 @@ export class TransactionGeneratorComponent implements OnInit {
       // Todo: Is connecting to any one, If not try connect
       const peerConnecting: number = this.connSer.isConnectPeer();
       if (peerConnecting <= 0) { await this.connSer.connectRandomOnlinePeer(); }
+      // Todo: save it to local transaction
       // Todo: Broadcast it
-      this.connSer.broadCastAll(transaction);
-      this.logger.info('sendTransaction: END');
+      await this.connSer.broadCastAll(transaction);
+      // const peerId = prompt('Please enter a peer to connect with');
+      // const dataConnection = this.connSer.connectTo(peerId);
+      console.log('sendTransaction: END');
     } catch (err) {
       console.error(err);
       this.notifier.notify(NotifierType.ERROR, err);
@@ -137,14 +138,14 @@ export class TransactionGeneratorComponent implements OnInit {
   }
 
   public deleteTransaction(indexed: number): void {
-    this.logger.info('deleteTransaction: START');
-    this.logger.debug(`Delete item index ${indexed}`);
+    console.log('deleteTransaction: START');
+    console.log(`Delete item index ${indexed}`);
     this.transactionArray = this.transactionArray.filter((value, index) => index !== indexed);
-    this.logger.info('deleteTransaction: END');
+    console.log('deleteTransaction: END');
   }
 
   public editTransaction(indexed: number): void {
-    this.logger.info('editTransaction: START');
+    console.log('editTransaction: START');
     const selectedTransaction = this.transactionArray[indexed];
 
     this.formGroup.patchValue({
@@ -154,7 +155,7 @@ export class TransactionGeneratorComponent implements OnInit {
       description: selectedTransaction.description,
       currency: selectedTransaction.currency
     });
-    this.logger.info('editTransaction: END');
+    console.log('editTransaction: END');
   }
 
 }

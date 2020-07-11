@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
+import { AccountDoc, Operator, Table } from '@data/enum/database.info';
 import { User } from '@data/schema/user.model';
 import { FirebaseService } from '@data/service/firebase.service';
-import { CommonResult } from '@data/type/general.type';
+import { HashUtils } from '@data/utils/hash.util';
 import { QueryBuiler } from '@data/utils/query.util';
-import { Table, Operator, AccountDoc } from '@data/enum/database.info';
 import { NotifierType, SessionAtribute } from '@shared/enum/SharedEnum';
 import { errorMessage } from '@shared/error/ErrorMessage';
-import { NotifierService } from 'angular-notifier';
-import { HashUtils } from '@data/utils/hash.util';
 import { Message } from '@shared/messages/CommonMessage';
-import { Router } from '@angular/router';
-import { ConnectionService } from '../p2p/connection.service';
+import { NotifierService } from 'angular-notifier';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +23,7 @@ export class AuthService {
     private readonly notifier: NotifierService,
     private router: Router
   ) {
-    this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
+    this.userSubject = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('user')));
   }
 
   public get User() {

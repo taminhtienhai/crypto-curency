@@ -3,7 +3,6 @@ import { Block } from '@data/schema/block.model';
 import { NotifierType, SessionAtribute } from '@shared/enum/SharedEnum';
 import { errorMessage } from '@shared/error/ErrorMessage';
 import { NotifierService } from 'angular-notifier';
-import { NGXLogger } from 'ngx-logger';
 import { CoinBase, DIFFICULT } from '../constants/CommonConstant';
 import { AccountDoc, Operator, Table } from '../enum/database.info';
 import { Transaction } from '../schema/transaction.model';
@@ -11,6 +10,7 @@ import { CommonResult, SendInfo } from '../type/general.type';
 import { QueryBuiler } from '../utils/query.util';
 import { FirebaseService } from './firebase.service';
 import { TransactionService } from './transaction.service';
+import { SessionUtils } from '@shared/utils/session.util';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +20,7 @@ export class BlockService {
   constructor(
     private tranSer: TransactionService,
     private fireSer: FirebaseService,
-    private notifier: NotifierService,
-    private logger: NGXLogger
+    private notifier: NotifierService
   ) { }
 
   /**
@@ -30,8 +29,8 @@ export class BlockService {
    * @errors throw Error
    */
   public async generateGenesis(): Promise<Block> {
-    this.logger.info('generateGenesis: START');
-    const user = JSON.parse(sessionStorage.getItem(SessionAtribute.USER));
+    console.log('generateGenesis: START');
+    const user = SessionUtils.getUser();
     const account = await this.fireSer.readItem(Table.ACCOUNT, [
       QueryBuiler.createCondition(AccountDoc.USERNAME, Operator.EQUAL, user.username)
     ]);
@@ -60,7 +59,7 @@ export class BlockService {
       this.notifier.notify(NotifierType.ERROR, error);
     }
     block.previousHash = 0;
-    this.logger.info('generateGenesis: END');
+    console.log('generateGenesis: END');
     return block;
   }
 
@@ -70,7 +69,7 @@ export class BlockService {
    * @errors { success: false, error: [not_null], data: [null] }
    */
   public async createBlock(transactions: Transaction[], difficult: number): Promise<CommonResult> {
-    this.logger.info('createBlock: START');
+    console.log('createBlock: START');
     let flag = true;
     let error = null;
     let data = null;
@@ -85,11 +84,11 @@ export class BlockService {
       if (!mineCoin) { throw new Error(errorMessage.CREATE_FAIL); }
       data = block.value;
     } catch (err) {
-      this.logger.error(err);
+      console.error(err);
       flag = false;
       error = err;
     }
-    this.logger.info('createBlock: END');
+    console.log('createBlock: END');
     return { success: flag, error, data };
   }
 }
