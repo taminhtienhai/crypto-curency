@@ -5,12 +5,12 @@ import { Wallet } from '@data/schema/wallet.model';
 import { IndexeddbService } from '@data/service/indexeddb.service';
 import { TransactionService } from '@data/service/transaction.service';
 import { SendInfo } from '@data/type/general.type';
-import { NotifierType } from '@shared/enum/SharedEnum';
+import { DataType, Mode, NotifierType } from '@shared/enum/SharedEnum';
 import { NotifierService } from 'angular-notifier';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ConnectionService } from '@core/p2p/connection.service';
-import { SessionUtils } from '../../../../shared/utils/session.util';
+import { SessionUtils } from '@shared/utils/session.util';
 
 @Component({
   selector: 'app-transaction-generator',
@@ -26,7 +26,7 @@ export class TransactionGeneratorComponent implements OnInit {
   walletOptions: Observable<Wallet[]>;
   sendInfo: SendInfo[] = [];
 
-  sendMode = -1;
+  sendMode = 1;
 
   constructor(
     private fb: FormBuilder,
@@ -113,8 +113,8 @@ export class TransactionGeneratorComponent implements OnInit {
    * Broadcast a new Transaction to connecting Peer.
    */
   public async sendTransaction(): Promise<void> {
-    console.log('sendTransaction: START');
     this.sendMode = 0;
+    console.log('sendTransaction: START');
     try {
       const transaction = await this.tranSer.createTransaction(this.sendInfo);
       console.log(transaction);
@@ -125,15 +125,15 @@ export class TransactionGeneratorComponent implements OnInit {
       const peerConnecting: number = this.connSer.isConnectPeer();
       if (peerConnecting <= 0) { await this.connSer.connectRandomOnlinePeer(); }
       // Todo: save it to local transaction
+      await this.dbSer.insert(Table.TRANSACTION, transaction);
       // Todo: Broadcast it
-      await this.connSer.broadCastAll(transaction);
-      // const peerId = prompt('Please enter a peer to connect with');
-      // const dataConnection = this.connSer.connectTo(peerId);
+      await this.connSer.broadCastAll({ type: DataType.TRANSACTION, mode: Mode.NEW, data: transaction.value });
       console.log('sendTransaction: END');
     } catch (err) {
       console.error(err);
       this.notifier.notify(NotifierType.ERROR, err);
-      this.sendMode = -1;
+    } finally {
+      this.sendMode = 1;
     }
   }
 

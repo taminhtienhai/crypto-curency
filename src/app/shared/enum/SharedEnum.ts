@@ -20,3 +20,14 @@ export enum ExchangeStatus {
   DONE = 'done',
   AVOID = 'avoid'
 }
+
+export enum Mode {
+  NEW = 'new',
+  CLONE_REQUEST = 'clone_request'
+}
+
+export enum DataType {
+  BLOCK = 'block',
+  BLOCKCHAIN = 'blockchain',
+  TRANSACTION = 'transaction'
+}

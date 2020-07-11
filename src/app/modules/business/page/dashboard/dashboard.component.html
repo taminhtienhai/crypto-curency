@@ -9,23 +9,24 @@
            <p> </p>
            <mat-divider></mat-divider>
         </div>
-        
-        
-       
         <div class="item">
             <mat-icon id="email">email</mat-icon> Email: 
             <p> </p>
             <mat-divider></mat-divider>
         </div>
-        
         <div class="item">
             <mat-icon id="contacts">contacts</mat-icon> Wallet Address: 
             <p> </p>
             <mat-divider></mat-divider>
         </div>
-        
+        <div class="item">
+            <p>
+                <mat-icon id="wallet">account_balance_wallet</mat-icon> Balance: {{balance}}
+            </p>
+            <mat-divider></mat-divider>
+        </div>
+        <button (click)="mineAllTransaction()" color="warn" mat-raised-button>Mine</button>
      </div>
-   
 </main>
 <aside >
 

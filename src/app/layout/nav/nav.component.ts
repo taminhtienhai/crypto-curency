@@ -25,8 +25,9 @@ export class NavComponent implements OnInit {
   }
 
   async resetLocalDB() {
-    // const { success, error, data } = await this.dbSer.clear(Table.WALLET);
+    const { success, error, data } = await this.dbSer.clear(Table.WALLET);
     const blockResult = await this.dbSer.clear(Table.BLOCK);
+    await this.dbSer.clear(Table.TRANSACTION);
     // if (!success) { console.log(error); }
     // if (success) { console.log(data); }
   }

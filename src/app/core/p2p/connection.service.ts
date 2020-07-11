@@ -3,13 +3,14 @@ import Peer from 'peerjs';
 import { SessionUtils } from '../../shared/utils/session.util';
 import { NotifierService } from 'angular-notifier';
 import { errorMessage } from '@shared/error/ErrorMessage';
-import { NotifierType } from '@shared/enum/SharedEnum';
+import { DataType, Mode, NotifierType } from '@shared/enum/SharedEnum';
 import { PeerConnection } from './model/peerconnection.model';
 import { DataConnection } from 'peerjs';
 import { Account } from '../../data/schema/account.model';
 import { FirebaseService } from '../../data/service/firebase.service';
 import { Table, AccountDoc, Operator, ConnectStatus } from '../../data/enum/database.info';
 import { QueryBuiler } from '../../data/utils/query.util';
+import { IndexeddbService } from '../../data/service/indexeddb.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,8 @@ export class ConnectionService {
 
   constructor(
     private readonly notifier: NotifierService,
-    private readonly fireSer: FirebaseService
+    private readonly fireSer: FirebaseService,
+    private readonly dbSer: IndexeddbService
   ) { }
 
   public newPeer(peerId: string): Peer {
@@ -103,10 +105,8 @@ export class ConnectionService {
       console.log(connection.peer);
       connection.send(`Peer ${this.peer.id} say hello`);
       // Receive data from peer
-      connection.on('data', (data) => {
-        console.log(data);
-        // Todo: Mode blockchain update
-        // Todo: Mode transactions update
+      connection.on('data', (message) => {
+        this.manageReceivedData(message);
       });
       // When that peer disconnect
       connection.on('close', () => {
@@ -126,6 +126,24 @@ export class ConnectionService {
   }
 
   /**
+   * Choose action depend on mode and type
+   * @param message broadcast from other peer
+   */
+  public manageReceivedData(message: any, connection?: DataConnection) {
+    console.log(message);
+    if (message.mode && message.mode === Mode.NEW) {
+      this.saveToLocal(message.type, message.data);
+    }
+    if (message.mode && message.mode === Mode.CLONE_REQUEST) {
+      // this.saveToLocal(message.type, message.data);
+    }
+  }
+
+  public saveToLocal(table: string, data: any) {
+    this.dbSer.insert(table, data);
+  }
+
+  /**
    * Remove manage Peer has been disconnected.
    */
   public removePeerDisconnected(connection: any): void {
@@ -142,7 +160,10 @@ export class ConnectionService {
     }
     for (const conn of this.dataConnectionArray) {
       console.log(`Peer to broadcast is ${conn.peer}`);
-      conn.on('open', () => { conn.send(data); });
+      conn.on('open', () => {
+        conn.send(data);
+        this.notifier.notify(NotifierType.SUCCESS, 'Broadcast success');
+      });
     }
   }
 

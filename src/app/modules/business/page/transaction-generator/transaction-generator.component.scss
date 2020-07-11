@@ -3,7 +3,6 @@
 }
 
 main{
-   
     border-right: 2px double black;
     
     background-color: #fbd46d;
@@ -55,7 +54,7 @@ button{
     display: flex;
 }
 aside{
-  
+    max-width: 100%;
     background-color: #679b9b;
 }
 .send-transaction{

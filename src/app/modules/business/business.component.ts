@@ -52,7 +52,7 @@ export class BusinessComponent implements OnInit {
     // console.log(blockchain.length === 0);
     if (blockchain.length === 0) {
       const block = await this.blockSer.generateGenesis();
-      if (!block) { console.log('No wallet found. Stop generation'); }
+      if (!block) { console.log('No wallet found. Stop generation'); return;}
       console.log(block);
       const result = await this.dbSer.insert(Table.BLOCK, block);
       console.error(result.error);
