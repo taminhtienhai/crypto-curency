@@ -1,3 +1,105 @@
+.wrapper-exchange{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 0;
+    border: none;
+ 
+}
+
+main{
+  border-right: 2px double black;
+  background-color: #f7c5a8;
+ padding-left: 15px;
+ padding-right: 15px;
+ padding-top: 15px;
+    
+}
+aside{
+  background-color: #679b9b;
+  padding-top: 15px;
+  
+}
+.title{
+  border-bottom:  5px double yellow;
+ 
+  width: fit-content;
+ 
+  margin: 0 auto;
+  margin-bottom: 50px;
+  
+}
+#calendar-today{
+  color: yellow;
+  font-size: 30px;
+}
+#article{
+  color: yellow;
+  font-size: 30px;
+}
+#title-name{
+ font-size: xx-large;
+ text-transform: uppercase;
+ margin-left: 10px;
+ 
+ color: black;
+}
+.mat-stroked-button{
+    background-color: yellow;
+    border: 1px solid;
+    font-size: 20px;
+  margin-left: 15px;
+ 
+  float: right;
+}
+.mat-stroked-button:hover{
+  background-color: red;
+  color: white;
+}
+article{
+  margin-top: 15px;
+}
+.send{
+  text-align: center;
+}
+.mat-raised-button{
+  margin-top: 15px;
+  padding-left: 30px;
+ padding-right: 30px;
+  font-size: 30px;
+}
+.mat-raised-button:hover{
+  background-color: black;
+  color: yellow;
+}
+
+mat-divider{
+  background-color: black;
+  font-size: 5px;
+  font-weight: bold;
+ 
+  margin-bottom: 40px;
+}
+
+form{
+  margin-bottom: 40px;
+  margin-top: 40px;
+}
+
+mat-list{
+  padding: 0;
+}
+#local-atm{
+  font-size: 30px;
+}
+#monetization-on{
+  font-size: 30px;
+}
+#swap-horizontal-circle{
+  font-size: 30px;
+}
+#swap-horizontal-circle:hover{
+  color:yellow;
+}
 .status-bar {
   height: fit-content;
   line-height: 0.5em;

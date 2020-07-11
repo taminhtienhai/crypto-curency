@@ -1,28 +1,31 @@
 <div class="wrapper wrapper-register">
+  <h1>OFFICIAL SIGNUP FORM</h1>
+  <div class="content">
+    <h2>SIGNUP HERE</h2>
   <form [formGroup]="registerForm" autocomplete="off">
     <mat-form-field>
-      <mat-label>Email</mat-label>
+      
       <input
         type="email"
         formControlName="email"
-        matInput>
+        matInput placeholder="EMAIL">
       <mat-error></mat-error>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Password</mat-label>
+      
       <input
         type="password"
         formControlName="password"
-        matInput>
+        matInput placeholder="PASSWORD">
       <mat-error></mat-error>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Confirm Password</mat-label>
+      
       <input
         type="password"
         formControlName="confirm"
         [errorStateMatcher]="matcher"
-        matInput>
+        matInput placeholder="CONFIRM PASSWORD">
       <mat-error></mat-error>
     </mat-form-field>
     <button
@@ -30,4 +33,5 @@
       color="accent"
       mat-raised-button>Register</button>
   </form>
+  </div>
 </div>

@@ -2,7 +2,11 @@
   <main>
     <form [formGroup]="formGroup" (ngSubmit)="sendCoin()" autocomplete="off">
       <section class="group-one">
-        <mat-form-field>
+        <div class="title">
+          <mat-icon id="calendar-today">calendar_today</mat-icon> <span id="title-name">Send transaction</span> 
+          <mat-icon id="calendar-today">calendar_today</mat-icon>
+         </div>
+        <mat-form-field class="full-width">
           <mat-label>Your Wallet Id</mat-label>
           <input type="text" formControlName="sender" [matAutocomplete]="auto" matInput>
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayChoiceAddress">
@@ -34,6 +38,7 @@
               <input formControlName="amount" matInput>
               <mat-icon matPrefix></mat-icon>
             </mat-form-field>
+            <mat-icon id="swap_horiz">swap_horiz</mat-icon> 
             <mat-form-field>
               <mat-label>USD</mat-label>
               <input matInput>
@@ -58,11 +63,13 @@
         <!-- <p>Sender: <span>{{ transaction.sender }}</span></p> -->
         <p>Recepient: <span>{{ transaction.recipient }}</span></p>
         <div class="list-item-action">
-          <button (click)="deleteTransaction(i)" mat-button>Delete</button>
-          <button mat-button>Edit</button>
+          <button (click)="deleteTransaction(i)" mat-stroked-button>Delete</button>
+          <button mat-stroked-button>Edit</button>
         </div>
       </mat-list-item>
     </mat-list>
+
+    <div class="send-transaction">
     <button
       [disabled]="sendInfo.length === 0"
       (click)="sendTransaction()"
@@ -71,5 +78,6 @@
       <mat-spinner *ngIf="sendMode === 0"></mat-spinner>
       <span>Send Transaction</span>
     </button>
+  </div>
   </aside>
 </div>
