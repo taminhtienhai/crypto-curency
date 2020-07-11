@@ -1,0 +1,13 @@
+.wallet-wrapper {
+  display: grid;
+  grid-template-columns: 60% 40%;
+}
+
+.wallet-button-creation {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}

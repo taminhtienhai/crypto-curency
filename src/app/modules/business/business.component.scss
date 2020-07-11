@@ -1,0 +1,14 @@
+.wrapper-business {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    margin: 0 1em;
+}
+
+.left-sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+router-outlet {
+    display: none;
+}

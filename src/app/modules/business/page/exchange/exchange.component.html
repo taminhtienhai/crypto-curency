@@ -1,0 +1,43 @@
+<div class="wrapper wrapper-exchange">
+  <form [formGroup]="formGroup" autocomplete="off">
+    <button
+      (click)="isBuy=!isBuy"
+      mat-stroked-button>
+      {{ isBuy ? 'buy' : 'sell' }}
+    </button>
+    <!-- Content -->
+    <article class="inline space-between">
+      <mat-form-field>
+        <mat-label>Amount</mat-label>
+        <input
+          (keyup)="exchange(this.$event.target.value)"
+          type="number"
+          formControlName="amount"
+          matInput>
+        <mat-icon matSuffix>{{ isCash ? 'local_atm' : 'monetization_on' }}</mat-icon>
+        <mat-error *ngIf="formGroup.get('amount').errors">Input too small</mat-error>
+      </mat-form-field>
+      <button (click)="isCash=!isCash" mat-icon-button>
+        <mat-icon>swap_horizontal_circle</mat-icon>
+      </button>
+      <p>
+        {{ exchangeAmount }}
+        <mat-icon>{{ isCash ? 'monetization_on' : 'local_atm' }}</mat-icon>
+      </p>
+    </article>
+    <!-- Action -->
+    <button (click)="sendExchangeRequest()" color="warn" mat-raised-button>Exchange</button>
+  </form>
+  <mat-divider></mat-divider>
+  <mat-list>
+    <h3>Exchange History</h3>
+    <mat-list-item class="inline space-between" *ngFor="let item of exchangeHistory">
+      <p class="expand-width">Amount: {{ item.amount }}</p>
+      <div class="status-bar">
+        <button class="rounded rounded-danger" mat-button>{{ item.action }}</button>
+        <button class="rounded rounded-success" mat-button>{{ item.status }}</button>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>
+

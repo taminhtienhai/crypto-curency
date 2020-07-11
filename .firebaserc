@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "crypto-currency-f3dd9": {
+      "hosting": {
+        "crypto-currency": [
+          "crypto-currency-f3dd9"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "crypto-currency-f3dd9"
+  }
+}

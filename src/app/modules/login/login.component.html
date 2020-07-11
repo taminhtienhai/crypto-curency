@@ -1,0 +1,24 @@
+<div class="wrapper wrapper-register">
+  <form [formGroup]="loginForm" autocomplete="off">
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input
+        type="text"
+        formControlName="username"
+        matInput>
+      <mat-error></mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input
+        type="password"
+        formControlName="password"
+        matInput>
+      <mat-error></mat-error>
+    </mat-form-field>
+    <button
+      (click)="onLogin()"
+      color="accent"
+      mat-raised-button>Login</button>
+  </form>
+</div>

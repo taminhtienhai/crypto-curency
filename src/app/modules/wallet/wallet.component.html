@@ -1,0 +1,49 @@
+<div class="wrapper wallet-wrapper">
+  <form [formGroup]="formGroup" id="wallet-form" autocomplete="off">
+    <mat-form-field>
+      <mat-label>Your Wallet Address</mat-label>
+      <input 
+        type="text"
+        formControlName="publicKey"
+        matInput
+        required
+        readonly>
+      <button 
+        (click)="refreshKeyPair()"
+        matSuffix 
+        mat-button>
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <mat-error></mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>SecretKey</mat-label>
+      <input
+        type="text"
+        formControlName="privateKey"
+        matInput
+        required>
+      <mat-error></mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Wallet Name</mat-label>
+      <input 
+        type="text"
+        formControlName="walletName"
+        matInput
+        required>
+      <mat-error></mat-error>
+    </mat-form-field>
+  </form>
+  <div class="wallet-button-creation">
+    <button
+      (click)="saveWallet()"
+      color="warn"
+      form="wallet-form"
+      mat-button>
+      <mat-icon>account_balance_wallet</mat-icon>
+    </button>
+    <p>Create your First Wallet</p>
+    <p>Discovery all Features Inside It</p>
+  </div>
+</div>

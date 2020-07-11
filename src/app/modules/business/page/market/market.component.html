@@ -1,0 +1,21 @@
+<div class="wrapper wrapper-market">
+  <nav></nav>
+  <h1
+    style="color: crimson; text-align: center;"
+    *ngIf="exchangeRequests.length === 0">
+    No exchange found
+  </h1>
+  <mat-list>
+    <mat-list-item *ngFor="let request of exchangeRequests">
+      <section class="inline space-between expand-width">
+        <p>Id: {{ request.id }}</p>
+        <p>Amount: {{ request.amount }}</p>
+        <p>{{ request.status }}</p>
+      </section>
+      <mat-divider></mat-divider>
+      <mat-action-list>
+        <button (click)="onAction(request.id)" color="warn" mat-raised-button>{{ request.action === 'sell' ? 'buy' : 'buy' }}</button>
+      </mat-action-list>
+    </mat-list-item>
+  </mat-list>
+</div>

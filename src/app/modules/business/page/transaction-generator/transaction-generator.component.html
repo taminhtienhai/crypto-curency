@@ -1,0 +1,75 @@
+<div class="business-content-wrapper">
+  <main>
+    <form [formGroup]="formGroup" (ngSubmit)="sendCoin()" autocomplete="off">
+      <section class="group-one">
+        <mat-form-field>
+          <mat-label>Your Wallet Id</mat-label>
+          <input type="text" formControlName="sender" [matAutocomplete]="auto" matInput>
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayChoiceAddress">
+            <mat-option *ngFor="let wallet of walletOptions | async" [value]="wallet">
+              {{ wallet.publicKey }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="formGroup.get('sender').invalid">Hash error</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Curency</mat-label>
+          <mat-select formControlName="currency">
+            <mat-option>--NONE--</mat-option>
+            <mat-option value="bitcoin">Bitcoin</mat-option>
+          </mat-select>
+          <mat-icon matSuffix>monetization_on</mat-icon>
+        </mat-form-field>
+      </section>
+      <section class="group-two">
+        <mat-form-field class="full-width">
+          <mat-label>Recepient Id</mat-label>
+          <input formControlName="recipient" matNativeControl>
+        </mat-form-field>
+        <div>
+          <h3>Amount</h3>
+          <div class="sub-group-two">
+            <mat-form-field>
+              <mat-label>Coin</mat-label>
+              <input formControlName="amount" matInput>
+              <mat-icon matPrefix></mat-icon>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>USD</mat-label>
+              <input matInput>
+              <mat-icon matPrefix></mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+      </section>
+      <section class="group-three">
+        <mat-form-field class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea rows="3" cols="5" maxlength="100" formControlName="description" matNativeControl></textarea>
+        </mat-form-field>
+      </section>
+      <button type="submit" [disabled]="!formGroup.valid" mat-button>Create Transaction</button>
+    </form>
+  </main>
+  <aside>
+    <mat-list>
+      <mat-list-item *ngFor="let transaction of transactionArray;let i = index" matBadge="{{ i + 1 }}"
+        matBadgeColor="warn" (click)="editTransaction(i)">
+        <!-- <p>Sender: <span>{{ transaction.sender }}</span></p> -->
+        <p>Recepient: <span>{{ transaction.recipient }}</span></p>
+        <div class="list-item-action">
+          <button (click)="deleteTransaction(i)" mat-button>Delete</button>
+          <button mat-button>Edit</button>
+        </div>
+      </mat-list-item>
+    </mat-list>
+    <button
+      [disabled]="sendInfo.length === 0"
+      (click)="sendTransaction()"
+      color="warn"
+      mat-raised-button>
+      <mat-spinner *ngIf="sendMode === 0"></mat-spinner>
+      <span>Send Transaction</span>
+    </button>
+  </aside>
+</div>

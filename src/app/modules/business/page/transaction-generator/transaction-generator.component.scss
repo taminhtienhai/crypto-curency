@@ -1,0 +1,9 @@
+.full-width {
+    width: 100%;
+}
+
+
+.business-content-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}

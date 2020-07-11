@@ -1,0 +1,10 @@
+<mat-toolbar color="accent">
+    <a [routerLink]="['/']" mat-raised-button>Home</a>
+    <a [routerLink]="['/business']" mat-raised-button>Dashboard</a>
+    <a [routerLink]="['/wallet-creation']" mat-raised-button>Create Wallet</a>
+    <a [routerLink]="['/register']" mat-raised-button>Register</a>
+    <a [routerLink]="['/login']" mat-raised-button>Login</a>
+    <a (click)="onLogout()" mat-raised-button>Logout</a>
+    <a (click)="resetLocalDB()" mat-raised-button>Reset IndexedDB</a>
+    <a mat-raised-button>Reset Account Firebase</a>
+</mat-toolbar>

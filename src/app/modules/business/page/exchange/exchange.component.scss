@@ -1,0 +1,18 @@
+.status-bar {
+  height: fit-content;
+  line-height: 0.5em;
+}
+
+.rounded {
+  border-radius: 50%;
+  line-height: 1em;
+}
+
+.rounded-success {
+  color: green;
+  background-color: lightgreen;
+}
+
+.rounded-danger {
+  color: crimson
+}
