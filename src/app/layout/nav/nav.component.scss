@@ -1,0 +1,47 @@
+mat-toolbar{
+  background-color: black;
+  width: 100%;
+  padding-left: 50px;
+}
+.d-flex{
+display: flex;
+}
+a {
+  margin-left: 5px;
+  text-align: center; 
+  font-size: large;
+  margin-bottom: auto;
+  margin-top: auto    ;
+ 
+}
+.flex-row-reverse{
+  padding-left: 20px;
+}
+.mat-button{
+  color: white;
+  margin-right: 30px;
+  padding: initial;
+  text-decoration: none;
+}
+.mat-button:hover{
+  background-color: yellow;
+  color: black;
+}
+.mat-raised-button{
+  color: lightgrey;
+  margin-right: 10px;
+  text-decoration: none;
+}
+.mat-raised-button:hover{
+  font-size: 25px;
+}
+h1{
+  color: yellow;
+  font-style: italic;
+  font-size: 40px;
+  text-decoration: underline;
+  padding-right: 50px;
+  padding-top: 0px;
+  padding-bottom: 18px;
+}
+

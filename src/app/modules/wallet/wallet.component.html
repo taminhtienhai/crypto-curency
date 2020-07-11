@@ -1,23 +1,26 @@
 <div class="wrapper wallet-wrapper">
   <form [formGroup]="formGroup" id="wallet-form" autocomplete="off">
+    <div class="title">
+      <mat-icon id="calendar-today">calendar_today</mat-icon> <span id="title-name">Create Wallet</span> <mat-icon id="calendar-today">calendar_today</mat-icon>
+     </div>
+    <button 
+    (click)="refreshKeyPair()"
+    matSuffix 
+    mat-button>
+    <mat-icon>refresh</mat-icon><mat-label>Refresh</mat-label>
+  </button>
     <mat-form-field>
-      <mat-label>Your Wallet Address</mat-label>
-      <input 
+      <mat-label>PublicKey</mat-label> 
+      <input
         type="text"
         formControlName="publicKey"
         matInput
         required
         readonly>
-      <button 
-        (click)="refreshKeyPair()"
-        matSuffix 
-        mat-button>
-        <mat-icon>refresh</mat-icon>
-      </button>
       <mat-error></mat-error>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>SecretKey</mat-label>
+      <mat-label>PrivateKey</mat-label>
       <input
         type="text"
         formControlName="privateKey"
@@ -35,13 +38,14 @@
       <mat-error></mat-error>
     </mat-form-field>
   </form>
+
   <div class="wallet-button-creation">
     <button
       (click)="saveWallet()"
       color="warn"
       form="wallet-form"
       mat-button>
-      <mat-icon>account_balance_wallet</mat-icon>
+      <mat-icon>account_balance_wallet</mat-icon> Create
     </button>
     <p>Create your First Wallet</p>
     <p>Discovery all Features Inside It</p>

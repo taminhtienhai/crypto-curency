@@ -1,0 +1,60 @@
+.wrapper {
+  background: url("/assets/image/banner.jpg");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  text-align: center;
+  padding: 0;
+ }
+ h1 {
+  font-size: 45px;
+  font-weight: 400;
+  letter-spacing: 5px;
+  margin: 50px auto;
+  text-align: center;
+  color: white;
+}
+.content {
+  width: 30%;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #127681;
+}
+
+h2 {
+  font-size: 40px;
+  font-weight: normal;
+  color: #fff;
+  text-align: Center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  
+}
+.mat-form-field{
+  width: 100%;
+  padding-bottom: 0;
+}
+input[type="password"], input[type="email"]{
+  width: 100%;
+	padding: 15px 10px 15px;
+	font-size: 20px;
+	background: white;
+  color: black;
+	outline: none;
+	margin-bottom: 26px;
+
+	font-family: 'Quicksand', sans-serif;
+}
+button{
+  width: 100%;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 65px;
+  background-color: blue;
+  color: white;
+}
+button:hover{
+  background-color: yellow;
+  color: red;
+}

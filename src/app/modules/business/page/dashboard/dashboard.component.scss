@@ -1,4 +1,43 @@
-.main-content > nav {
-    display: flex;
-    flex-direction: row;
+.dashboard-wrapper {
+    display: grid;
+    grid-template-columns: 60% 40%;
+   
+  }
+main{
+    background-color: #a8df65;
+    padding-left: 15px;
+    padding-right: 15px;
 }
+aside{
+    background-color: #edf492;
+}
+.title{
+    border-bottom:  5px double yellow;
+   
+    width: fit-content;
+   
+    margin: 0 auto;
+    margin-bottom: 20px;
+    padding-top: 20px;
+  }
+  #assignment-ind{
+     color: yellow;
+     font-size: 30px;
+  }
+  #title-name{
+    font-size: xx-large;
+    text-transform: uppercase;
+    margin-left: 7px;
+    color: black;
+  }
+  .item{
+      font-size: 25px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .item:hover{
+      background-color: #edf492;
+      color: #184d47;
+  }
+  mat-divider{
+      margin-bottom: 10px;
+  }

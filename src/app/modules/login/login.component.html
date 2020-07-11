@@ -1,21 +1,24 @@
 <div class="wrapper wrapper-register">
+  <h1>OFFICIAL LOGIN FORM</h1>
+  <div class="content">
+    <h2>LOGIN HERE</h2>
   <form [formGroup]="loginForm" autocomplete="off">
     <mat-form-field>
-      <mat-label>Username</mat-label>
+     <mat-label>Email</mat-label>
       <input
         type="text"
         formControlName="username"
-        matInput>
+         placeholder="EMAIL"> 
       <mat-error></mat-error>
-    </mat-form-field>
+    </mat-form-field><br>
     <mat-form-field>
       <mat-label>Password</mat-label>
       <input
         type="password"
         formControlName="password"
-        matInput>
+         placeholder="PASSWORD">
       <mat-error></mat-error>
-    </mat-form-field>
+    </mat-form-field><br>
     <button
       (click)="onLogin()"
       color="accent"

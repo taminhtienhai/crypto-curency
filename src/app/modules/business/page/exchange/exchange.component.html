@@ -1,10 +1,18 @@
 <div class="wrapper wrapper-exchange">
+  <main>
+    <div class="title">
+      <mat-icon id="calendar-today">calendar_today</mat-icon> <span id="title-name">Exchange Coin</span> <mat-icon id="calendar-today">calendar_today</mat-icon>
+          <button
+    (click)="isBuy=!isBuy"
+    mat-stroked-button><mat-icon id="cached">cached</mat-icon>
+    {{ isBuy ? 'buy' : 'sell' }}
+  </button>
+      
+    </div>
+    
+     <mat-divider class=""></mat-divider>
   <form [formGroup]="formGroup" autocomplete="off">
-    <button
-      (click)="isBuy=!isBuy"
-      mat-stroked-button>
-      {{ isBuy ? 'buy' : 'sell' }}
-    </button>
+    
     <!-- Content -->
     <article class="inline space-between">
       <mat-form-field>
@@ -18,19 +26,27 @@
         <mat-error *ngIf="formGroup.get('amount').errors">Input too small</mat-error>
       </mat-form-field>
       <button (click)="isCash=!isCash" mat-icon-button>
-        <mat-icon>swap_horizontal_circle</mat-icon>
+        <mat-icon id="swap-horizontal-circle">swap_horizontal_circle</mat-icon>
       </button>
-      <p>
+      <span>
         {{ exchangeAmount }}
-        <mat-icon>{{ isCash ? 'monetization_on' : 'local_atm' }}</mat-icon>
-      </p>
+        <mat-icon id="monetization-on">{{ isCash ? 'monetization_on' : 'local_atm' }}</mat-icon>
+      </span>
     </article>
     <!-- Action -->
-    <button (click)="sendExchangeRequest()" color="warn" mat-raised-button>Exchange</button>
+    
   </form>
   <mat-divider></mat-divider>
+  <div class="send">
+    <button (click)="sendExchangeRequest()" color="warn" mat-raised-button>Trade</button>
+  </div>
+  </main>
+  <aside>
   <mat-list>
-    <h3>Exchange History</h3>
+    <div class="title">
+      <mat-icon id="article">article</mat-icon> <span id="title-name">Exchange History</span> 
+        <mat-icon id="article">article</mat-icon>
+     </div>
     <mat-list-item class="inline space-between" *ngFor="let item of exchangeHistory">
       <p class="expand-width">Amount: {{ item.amount }}</p>
       <div class="status-bar">
@@ -39,5 +55,6 @@
       </div>
     </mat-list-item>
   </mat-list>
+</aside>
 </div>
 
