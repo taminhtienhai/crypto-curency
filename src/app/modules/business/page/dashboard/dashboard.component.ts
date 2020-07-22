@@ -20,6 +20,7 @@ import { DataType, Mode, NotifierType } from '../../../../shared/enum/SharedEnum
 export class DashboardComponent implements OnInit {
 
   balance = 0;
+  myInfo = SessionUtils.getUser();
 
   constructor(
     private dbSer: IndexeddbService,

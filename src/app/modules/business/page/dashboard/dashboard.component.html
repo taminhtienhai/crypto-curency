@@ -1,34 +1,62 @@
 <div class="wrapper dashboard-wrapper">
-<main >
+  <main>
     <div class="title">
-        <mat-icon id="assignment-ind">assignment_ind</mat-icon>  <span id="title-name">Personel information</span> <mat-icon id="assignment-ind">assignment_ind</mat-icon> 
-     </div>
-     <div class="full-width">
-        <div class="item">
-           <mat-icon id="account-box">account_box</mat-icon> User Name: 
-           <p> </p>
-           <mat-divider></mat-divider>
-        </div>
-        <div class="item">
-            <mat-icon id="email">email</mat-icon> Email: 
-            <p> </p>
-            <mat-divider></mat-divider>
-        </div>
-        <div class="item">
-            <mat-icon id="contacts">contacts</mat-icon> Wallet Address: 
-            <p> </p>
-            <mat-divider></mat-divider>
-        </div>
-        <div class="item">
-            <p>
-                <mat-icon id="wallet">account_balance_wallet</mat-icon> Balance: {{balance}}
-            </p>
-            <mat-divider></mat-divider>
-        </div>
-        <button (click)="mineAllTransaction()" color="warn" mat-raised-button>Mine</button>
-     </div>
-</main>
-<aside >
+      <mat-icon id="assignment-ind">assignment_ind</mat-icon> <span id="title-name">Personel information</span>
+      <mat-icon id="assignment-ind">assignment_ind</mat-icon>
+    </div>
+    <div class="full-width">
+      <!-- ! Better loop this -->
+      <div class="item">
+        <mat-icon id="account-box">account_box</mat-icon>
+        <span>User Name:</span>
+        <p></p>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="item">
+        <mat-icon id="email">email</mat-icon>
+        <span>Email:</span>
+        <p>{{ myInfo.username }}</p>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="item">
+        <!-- Todo: Display Wallet with Expandsion Panel -->
+          <!-- ! Should in Shared Component next time -->
+          <mat-accordion>
+            <!-- Todo: Mock first -->
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <!-- * Title -->
+                <mat-panel-title>
+                  <mat-icon id="contacts">contacts</mat-icon>
+                  <h3>Wallet</h3>
+                </mat-panel-title>
+                <!-- * Panel Description -->
+                <mat-panel-description>
+                  <span>{{ myInfo.wallets.length }}</span>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <!-- * Content Expansion -->
+              <article *ngFor="let wallet of myInfo.wallets"> <!-- Todo: Loop List Wallet -->
+                <section>
+                  <span>{{ wallet }}</span>
+                </section>
+              </article>
+            </mat-expansion-panel>
+          </mat-accordion>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="item">
+        <mat-icon id="wallet">account_balance_wallet</mat-icon>
+        <span>Balance: {{ balance }}</span>
+      </div>
+      <mat-divider></mat-divider>
+      <button
+        (click)="mineAllTransaction()"
+        color="warn" mat-raised-button
+        #mineAction>Mine</button>
+    </div>
+  </main>
+  <aside>
 
-</aside>
+  </aside>
 </div>

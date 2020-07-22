@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ConnectionService } from '@core/p2p/connection.service';
 import { AuthService } from '@core/service/auth.service';
-import { IndexeddbService } from '@data/service/indexeddb.service';
-import { FirebaseService } from '@data/service/firebase.service';
 import { Table } from '@data/enum/database.info';
+import { IndexeddbService } from '@data/service/indexeddb.service';
 
 @Component({
   selector: 'app-nav',
@@ -13,23 +13,22 @@ export class NavComponent implements OnInit {
 
   constructor(
     private readonly authSer: AuthService,
-    private readonly dbSer: IndexeddbService,
-    private readonly fireSer: FirebaseService
+    private readonly dbSer: IndexeddbService
+    // private readonly connSer: ConnectionService
   ) { }
 
   ngOnInit(): void {
   }
 
   onLogout() {
+    // this.connSer.disconnect();
     this.authSer.logout();
   }
 
   async resetLocalDB() {
-    const { success, error, data } = await this.dbSer.clear(Table.WALLET);
-    const blockResult = await this.dbSer.clear(Table.BLOCK);
+    await this.dbSer.clear(Table.WALLET);
+    await this.dbSer.clear(Table.BLOCK);
     await this.dbSer.clear(Table.TRANSACTION);
-    // if (!success) { console.log(error); }
-    // if (success) { console.log(data); }
   }
 
 }

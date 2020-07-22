@@ -1,18 +1,14 @@
 .wrapper-business {
     display: grid;
     grid-template-columns: 30% 70%;
-    margin: 0 1em;
-    
     background-color: #faf0af;
+    padding: 1em 2em;
+    grid-gap: 10px 10px;
 }
 
 .left-sidebar {
     display: flex;
     flex-direction: column;
-    margin-top: 12px;
-    margin-bottom: 12px;
-    margin-left: 50px;
-    margin-right: 50px;
 }
 button{
     font-size: 18px;
@@ -21,8 +17,6 @@ button{
 }
 .mat-raised-button {
     border: solid yellow;
-    margin-bottom: 2px;
-    margin-top: 2px;
 }
 .mat-raised-button:hover{
     font-size: 25px;
@@ -33,17 +27,12 @@ button{
 
 .mat-button {
     border: dashed yellow;
-    margin-bottom: 2px;
 }
 .mat-button:hover{
     font-size: 25px;
     background-color: black;
     color: white;
     border: solid yellow;
-}
-img{
-   height: 250px;
-  
 }
 router-outlet {
     display: none;

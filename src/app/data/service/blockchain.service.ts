@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
-import { NotifierType } from '../../shared/enum/SharedEnum';
-import { errorMessage } from '../../shared/error/ErrorMessage';
+import { errorMessage } from '@shared/errors/ErrorMessage';
 import { Table, WalletDoc } from '../enum/database.info';
 import { Block } from '../schema/block.model';
 import { TransactionInput } from '../schema/transaction-input.model';
@@ -57,6 +56,7 @@ export class BlockchainService {
    */
   public async getUTXOs(): Promise<TransactionOutput[]> {
     let tranOutputs: TransactionOutput[] = [];
+    this.blockchain = [];
     try {
       const blocks = await this.dbSer.fetchAll(Table.BLOCK);
       if (!blocks.success) { throw new Error(blocks.error); }
@@ -80,6 +80,7 @@ export class BlockchainService {
    * @errors throw Error
    */
   public async calculateOutput(): Promise<TransactionOutput[]> {
+    this.UTXOs = [];
     // Add output as Unspend transaction.
     for (const block of this.blockchain) {
       block.transactions.forEach(transaction => {

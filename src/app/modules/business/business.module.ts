@@ -9,6 +9,7 @@ import { MaterialModule } from '../../shared/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExchangeComponent } from './page/exchange/exchange.component';
 import { MarketComponent } from './page/market/market.component';
+import { LocalStoredComponent } from './page/local-stored/local-stored.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { MarketComponent } from './page/market/market.component';
     DashboardComponent,
     TransactionGeneratorComponent,
     ExchangeComponent,
-    MarketComponent
+    MarketComponent,
+    LocalStoredComponent
   ],
   imports: [
     CommonModule,

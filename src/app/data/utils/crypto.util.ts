@@ -1,7 +1,7 @@
 import * as eccryptoJS from 'eccrypto-js';
 import { KeyPair } from 'eccrypto-js';
 import { CommonResult } from '../type/general.type';
-import { errorMessage } from '../../shared/error/ErrorMessage';
+import { errorMessage } from '../../shared/errors/ErrorMessage';
 
 export class CryptoUtils {
 

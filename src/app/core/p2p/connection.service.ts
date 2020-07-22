@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import Peer from 'peerjs';
-import { SessionUtils } from '../../shared/utils/session.util';
+import { AccountDoc, ConnectStatus, Operator, Table } from '@data/enum/database.info';
+import { Account } from '@data/schema/account.model';
+import { FirebaseService } from '@data/service/firebase.service';
+import { IndexeddbService } from '@data/service/indexeddb.service';
+import { QueryBuiler } from '@data/utils/query.util';
+import { Mode, NotifierType } from '@shared/enum/SharedEnum';
+import { errorMessage } from '@shared/errors/ErrorMessage';
+import { SessionUtils } from '@shared/utils/session.util';
 import { NotifierService } from 'angular-notifier';
-import { errorMessage } from '@shared/error/ErrorMessage';
-import { DataType, Mode, NotifierType } from '@shared/enum/SharedEnum';
+import Peer, { DataConnection } from 'peerjs';
 import { PeerConnection } from './model/peerconnection.model';
-import { DataConnection } from 'peerjs';
-import { Account } from '../../data/schema/account.model';
-import { FirebaseService } from '../../data/service/firebase.service';
-import { Table, AccountDoc, Operator, ConnectStatus } from '../../data/enum/database.info';
-import { QueryBuiler } from '../../data/utils/query.util';
-import { IndexeddbService } from '../../data/service/indexeddb.service';
+import { ConnectionUtilService } from '@shared/services/connection-util.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,8 @@ export class ConnectionService {
   constructor(
     private readonly notifier: NotifierService,
     private readonly fireSer: FirebaseService,
-    private readonly dbSer: IndexeddbService
+    private readonly dbSer: IndexeddbService,
+    private readonly connUtil: ConnectionUtilService
   ) { }
 
   public newPeer(peerId: string): Peer {
@@ -35,21 +36,7 @@ export class ConnectionService {
       key: 'peerjs',
       host: 'my-peer-server-0009.herokuapp.com',
       secure: true,
-      port: 443,
-      config: {
-        iceServers: [
-          {
-            urls: ['turn:173.194.72.127:19305?transport=udp',
-              'turn:[2404:6800:4008:C01::7F]:19305?transport=udp',
-              'turn:173.194.72.127:443?transport=tcp',
-              'turn:[2404:6800:4008:C01::7F]:443?transport=tcp'
-            ],
-            username: 'CKjCuLwFEgahxNRjuTAYzc/s6OMT',
-            credential: 'u1SQDR/SQsPQIxXNWQT7czc/G4c='
-          },
-          { urls: ['stun:stun.l.google.com:19302'] }
-        ]
-      }
+      port: 443
     });
   }
 
@@ -92,6 +79,8 @@ export class ConnectionService {
     // When your connection begin success
     this.peer.on('open', (id: string) => {
       console.log(`My connection id is ${id}`);
+      // Todo: Update status to Online.
+      this.connUtil.updateStatus(ConnectStatus.ONLINE);
     });
     // When a peer connect to you
     this.peer.on('connection', (connection: DataConnection) => {
@@ -112,6 +101,8 @@ export class ConnectionService {
       connection.on('close', () => {
         // Todo: Delete that peer from manage list
         this.removePeerDisconnected(connection);
+        console.log(`Number of connection: ${ this.peerConnection.length }`);
+        this.connUtil.updatePeerStatus(connection.peer, ConnectStatus.OFFLINE);
       });
       // When geting error
       connection.on('error', (error) => {
@@ -133,6 +124,7 @@ export class ConnectionService {
     console.log(message);
     if (message.mode && message.mode === Mode.NEW) {
       this.saveToLocal(message.type, message.data);
+      this.notifier.notify(NotifierType.SUCCESS, `A peer send your a Transaction`);
     }
     if (message.mode && message.mode === Mode.CLONE_REQUEST) {
       // this.saveToLocal(message.type, message.data);
@@ -214,5 +206,12 @@ export class ConnectionService {
       console.log(err);
     }
     return [];
+  }
+
+  public disconnect() {
+    this.connUtil.updateStatus(ConnectStatus.OFFLINE);
+    this.peer.disconnect();
+    this.peerConnection = [];
+    this.dataConnectionArray = [];
   }
 }

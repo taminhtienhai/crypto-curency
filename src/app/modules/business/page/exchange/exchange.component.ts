@@ -4,7 +4,7 @@ import { Operator, Table } from '@data/enum/database.info';
 import { FirebaseService } from '@data/service/firebase.service';
 import { QueryBuiler } from '@data/utils/query.util';
 import { ExchangeAction, ExchangeStatus, NotifierType } from '@shared/enum/SharedEnum';
-import { errorMessage } from '@shared/error/ErrorMessage';
+import { errorMessage } from '@shared/errors/ErrorMessage';
 import { Message } from '@shared/messages/CommonMessage';
 import { SessionUtils } from '@shared/utils/session.util';
 import { NotifierService } from 'angular-notifier';
@@ -37,12 +37,16 @@ export class ExchangeComponent implements OnInit {
     });
     console.log(SessionUtils.getUser());
     this.fireSer.readItem(Table.EXCHANGE, [
-      QueryBuiler.createCondition('exchanging', Operator.EQUAL, SessionUtils.getUser().username)
+      QueryBuiler.createCondition('exchanger', Operator.EQUAL, SessionUtils.getUser().username)
     ]).then(result => {
       this.exchangeHistory.push(...result.data);
     });
   }
 
+  /**
+   * Exchange action
+   * @param value Coin you want to exchage
+   */
   exchange(value: number) {
     if (this.isCash) {
       this.exchangeAmount = value / this.exchangeRate;

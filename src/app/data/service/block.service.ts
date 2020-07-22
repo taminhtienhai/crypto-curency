@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Block } from '@data/schema/block.model';
 import { NotifierType, SessionAtribute } from '@shared/enum/SharedEnum';
-import { errorMessage } from '@shared/error/ErrorMessage';
+import { errorMessage } from '@shared/errors/ErrorMessage';
 import { NotifierService } from 'angular-notifier';
 import { CoinBase, DIFFICULT } from '../constants/CommonConstant';
 import { AccountDoc, Operator, Table } from '../enum/database.info';
@@ -11,6 +11,7 @@ import { QueryBuiler } from '../utils/query.util';
 import { FirebaseService } from './firebase.service';
 import { TransactionService } from './transaction.service';
 import { SessionUtils } from '@shared/utils/session.util';
+import { IndexeddbService } from './indexeddb.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,8 @@ export class BlockService {
   constructor(
     private tranSer: TransactionService,
     private fireSer: FirebaseService,
-    private notifier: NotifierService
+    private notifier: NotifierService,
+    private dbSer: IndexeddbService
   ) { }
 
   /**
@@ -75,8 +77,9 @@ export class BlockService {
     let data = null;
     try {
       const block = new Block();
+      block.previousHash = await this.getPreviousHash();
       for (const transaction of transactions) {
-        if (!block.add(transaction)) { throw new Error(errorMessage.CREATE_FAIL); }
+        block.add(transaction);
       }
       const merkletRoot = await block.calculateMerkletRoot();
       if (!merkletRoot) { throw new Error(errorMessage.EMPTY_VALUE); }
@@ -90,5 +93,11 @@ export class BlockService {
     }
     console.log('createBlock: END');
     return { success: flag, error, data };
+  }
+
+  async getPreviousHash(): Promise<string> {
+    const { success, error, data } = await this.dbSer.fetchAll(Table.BLOCK);
+    if (!success) { throw new Error(error); }
+    return data[data.length - 1]?.hash ?? '0';
   }
 }

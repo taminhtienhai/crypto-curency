@@ -31,3 +31,10 @@ body { margin: 0 auto; font-family: Roboto, "Helvetica Neue", sans-serif;}
   padding: 0;
   height: 100%;
 }
+
+.scrollable {
+  overflow: scroll;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  max-width: 100%;
+}

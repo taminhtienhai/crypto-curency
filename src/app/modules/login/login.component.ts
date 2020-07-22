@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NotifierType } from '@shared/enum/SharedEnum';
-import { errorMessage } from '@shared/error/ErrorMessage';
+import { errorMessage } from '@shared/errors/ErrorMessage';
 import { NotifierService } from 'angular-notifier';
 import { AuthService } from '../../core/service/auth.service';
 

@@ -7,7 +7,7 @@ import { User } from '@data/schema/user.model';
 import { FirebaseService } from '@data/service/firebase.service';
 import { QueryBuiler } from '@data/utils/query.util';
 import { NotifierType } from '@shared/enum/SharedEnum';
-import { MyErrorStateMatcher } from '@shared/error/ErrorFormHandle';
+import { MyErrorStateMatcher } from '@shared/errors/ErrorFormHandle';
 import { Message } from '@shared/messages/CommonMessage';
 import { NotifierService } from 'angular-notifier';
 

@@ -1,12 +1,5 @@
-import { NgxLoggerLevel } from 'ngx-logger';
-
 export const environment = {
   production: true,
-  logging: {
-    level: NgxLoggerLevel.DEBUG,
-    serverLogLevel: NgxLoggerLevel.ERROR,
-    serverLoggingUrl: 'https://crypto-currency.free.beeceptor.com/logs'
-  },
   firebase: {
     apiKey: 'AIzaSyAKNZy1jUdLwDlwfHErfohBXZ9-4KFZZKA',
     authDomain: 'crypto-currency-f3dd9.firebaseapp.com',

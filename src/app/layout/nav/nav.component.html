@@ -1,14 +1,14 @@
 <mat-toolbar>
     <div class="d-flex flex-row">
-    <h1>myExchange::</h1>
-    <a [routerLink]="['/']" mat-button>Home</a>
-    <a [routerLink]="['/business']" mat-button>Dashboard</a>
-    <a [routerLink]="['/wallet-creation']" mat-button>Create Wallet</a>
-    <a (click)="resetLocalDB()" mat-button>Reset IndexedDB</a>
+        <h1>myExchange::</h1>
+        <a [routerLink]="['/']" mat-button>Home</a>
+        <a [routerLink]="['/business']" mat-button>Dashboard</a>
+        <a [routerLink]="['/wallet-creation']" mat-button>Create Wallet</a>
+        <a (click)="resetLocalDB()" mat-button>Reset IndexedDB</a>
     </div>
     <div class="d-flex flex-row-reverse">
-    <a [routerLink]="['/register']" color="warn" mat-raised-button>Register</a>
-    <a [routerLink]="['/login']" color="primary" mat-raised-button>Login</a>
-    <a (click)="onLogout()" mat-raised-button>Logout</a>
+        <a [routerLink]="['/register']" color="warn" mat-raised-button>Register</a>
+        <a [routerLink]="['/login']" color="primary" mat-raised-button>Login</a>
+        <a (click)="onLogout()" mat-raised-button>Logout</a>
     </div>
 </mat-toolbar>

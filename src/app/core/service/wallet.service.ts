@@ -34,7 +34,7 @@ export class WalletService {
   }
 
   /**
-   * 
+   *
    */
   public async createNewWallet(publicKey: string, accountId: string, account: Account): Promise<CommonResult> {
     console.log('createNewWallet: START');

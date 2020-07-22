@@ -16,7 +16,7 @@ import { AccountDoc, Operator } from '@data/enum/database.info';
 import { FirebaseService } from '@data/service/firebase.service';
 import { QueryBuiler } from '@data/utils/query.util';
 import { NotifierType } from '@shared/enum/SharedEnum';
-import { errorMessage } from '@shared/error/ErrorMessage';
+import { errorMessage } from '@shared/errors/ErrorMessage';
 
 @Component({
   selector: 'app-wallet',

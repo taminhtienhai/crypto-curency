@@ -1,6 +1,6 @@
 import { TransactionInput } from './transaction-input.model';
 import { TransactionOutput } from './transaction-output.model';
-import { errorMessage } from '@shared/error/ErrorMessage';
+import { errorMessage } from '@shared/errors/ErrorMessage';
 import { CommonResult, SendInfo } from '../type/general.type';
 import { HashUtils } from '../utils/hash.util';
 export class Transaction {

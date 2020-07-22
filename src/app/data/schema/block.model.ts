@@ -1,4 +1,4 @@
-import { errorMessage } from '../../shared/error/ErrorMessage';
+import { errorMessage } from '../../shared/errors/ErrorMessage';
 import { HashUtils } from '../utils/hash.util';
 import { Transaction } from './transaction.model';
 export class Block {

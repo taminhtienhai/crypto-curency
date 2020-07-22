@@ -6,7 +6,7 @@ import { FirebaseService } from '@data/service/firebase.service';
 import { HashUtils } from '@data/utils/hash.util';
 import { QueryBuiler } from '@data/utils/query.util';
 import { NotifierType, SessionAtribute } from '@shared/enum/SharedEnum';
-import { errorMessage } from '@shared/error/ErrorMessage';
+import { errorMessage } from '@shared/errors/ErrorMessage';
 import { Message } from '@shared/messages/CommonMessage';
 import { NotifierService } from 'angular-notifier';
 import { BehaviorSubject } from 'rxjs';
@@ -70,7 +70,7 @@ export class AuthService {
   }
 
   public async logout() {
-    sessionStorage.removeItem('user');
+    sessionStorage.removeItem(SessionAtribute.USER);
     this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
